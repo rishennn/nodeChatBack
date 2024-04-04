@@ -5,7 +5,7 @@ const indexRouter = require("./routes/index");
 const { mongodb } = require("./config");
 const DB_URL = mongodb.link;
 
-const PORT = 4000;
+const PORT = 4444;
 
 const app = express();
 
