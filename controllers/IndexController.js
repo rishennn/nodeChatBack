@@ -1,3 +1,5 @@
+const ChatModel = require("../models/chat.model")
+
 class IndexController {
 	async mainPage(req,res,next) {
 		try{

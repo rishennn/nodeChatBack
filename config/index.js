@@ -1,5 +1,12 @@
-module.exports = {
-	mongodb: {
-		link: "mongodb+srv://rishennn:1111@admin.vlsu2oh.mongodb.net/"
-	}
-}
+const mongoose = require("mongoose");
+
+const connectDB = async (DATABASE_URI) => {
+  try {
+    await mongoose.connect(DATABASE_URI);
+    console.log("Database connected...");
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+module.exports = connectDB;
