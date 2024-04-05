@@ -1,24 +1,22 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const indexRouter = require("./routes/index");
-const { mongodb } = require("./config");
-const DB_URL = mongodb.link;
-
-const PORT = 4444;
+const express = require('express')
+const cors = require("cors")
+const indexRouter = require("./routes/index")
+const connectDB = require("./config");
 
 const app = express();
 
-app.use(express.json());
-app.use(cors());
+app.use(express.json())
+app.use(cors())
 
-app.use("/", indexRouter);
+const { DATABASE_URI, PORT } = process.env;
+connectDB(DATABASE_URI)
 
-(async function startApp() {
-  try {
-    await mongoose.connect(DB_URL);
-    app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
-  } catch (e) {
-    console.log(e);
-  }
-})();
+app.use('/', indexRouter);
+
+(async function startApp(){
+	try{
+		app.listen(PORT || 3500, () => console.log(`Server started on port ${PORT || 3500}`))
+	}catch(e){
+		console.log(e);
+	}
+})() 
