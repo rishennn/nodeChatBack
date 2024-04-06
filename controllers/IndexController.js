@@ -10,6 +10,7 @@ const genToken = (email, password) => {
   };
   return jwt.sign(myToken, SECRET_KEY, { expiresIn: "24h" });
 };
+
 class IndexController {
   async mainPage(req, res, next) {
     try {
@@ -28,24 +29,24 @@ class IndexController {
       if (checkEmail) {
         return res
           .status(400)
-          .json({ message: "Данный адрес уже зарегистрирован." });
+          .json({ message: "This address is already registered." });
       }
 
       if (password !== confirmPassword) {
-        return res.status(422).json({ message: "Пароли не совпадают." });
+        return res.status(422).json({ message: "Password mismatch." });
       }
 
       const hashedPassword = await bcrypt.hash(password, 5);
 
-      const newUser = new UsersModel({
+      const newUser = await UsersModel.create({
         name,
         email,
         password: hashedPassword,
-        confirmPassword: hashedPassword,
       });
 
-      await newUser.save();
-      return res.json({ message: "Пользователь успешно зарегистрирован!" });
+      return res.status(200).json({
+        message: "The user has been successfully registered!",
+      });
     } catch (e) {
       console.log(e);
     }
@@ -58,21 +59,29 @@ class IndexController {
       const user = await UsersModel.findOne({ email });
 
       if (!user) {
-        return res
-          .status(400)
-          .json({ message: "Такого адреса не существует." });
+        return res.status(400).json({ message: "No such address exists." });
       }
 
       const validPassword = await bcrypt.compare(password, user.password);
 
       if (!validPassword) {
-        return res.status(400).json({ message: "Пароль введён неправильно." });
+        return res
+          .status(400)
+          .json({ message: "The password was entered incorrectly." });
       }
 
       const token = await genToken(user.email, user.password);
       return res.json({ token });
     } catch (e) {
       console.log(e);
+    }
+  }
+  async users(req, res, next) {
+    try {
+      const users = await UsersModel.find({});
+      res.json(users);
+    } catch (e) {
+      next(e);
     }
   }
 }

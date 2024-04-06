@@ -13,12 +13,8 @@ const usersSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  confirmPassword: {
-    type: String,
-    required: true,
-  },
-});
+},{timestamp: true});
 
-const UsersModel = mongoose.model("User", usersSchema);
+const UsersModel = mongoose.model("users", usersSchema);
 
 module.exports = { UsersModel };

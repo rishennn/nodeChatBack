@@ -4,8 +4,9 @@ const router = express.Router();
 const IndexController = require("../controllers/IndexController");
 const checkAuth = require("../middleware/authMiddleware");
 
+router.get('/', IndexController.mainPage)
 router.post("/register", IndexController.register);
 router.post("/login", IndexController.login);
-router.get("/users", checkAuth, IndexController.mainPage);
+router.get("/users", checkAuth, IndexController.users);
 
 module.exports = router;
