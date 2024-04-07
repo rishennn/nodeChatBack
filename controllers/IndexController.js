@@ -3,12 +3,8 @@ const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = process.env;
 const { UsersModel } = require("../models/users.model");
 
-const genToken = (email, password) => {
-  const myToken = {
-    email,
-    password,
-  };
-  return jwt.sign(myToken, SECRET_KEY, { expiresIn: "24h" });
+const genToken = (id) => {
+  return jwt.sign({id}, SECRET_KEY, { expiresIn: "24h" });
 };
 
 class IndexController {
@@ -70,16 +66,26 @@ class IndexController {
           .json({ message: "The password was entered incorrectly." });
       }
 
-      const token = await genToken(user.email, user.password);
+      const token = await genToken(user._id);
       return res.json({ token });
     } catch (e) {
       console.log(e);
     }
   }
-  async users(req, res, next) {
+  async allUsers(req, res, next) {
     try {
       const users = await UsersModel.find({});
       res.json(users);
+    } catch (e) {
+      next(e);
+    }
+  }
+  async oneUser(req, res, next) {
+    try {
+      const { token } = req.params;
+      const {id} = jwt.decode(token, SECRET_KEY);
+      const user = await UsersModel.findById(id);
+      res.status(200).json(user.name);
     } catch (e) {
       next(e);
     }

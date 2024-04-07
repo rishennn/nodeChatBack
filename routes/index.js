@@ -7,6 +7,8 @@ const checkAuth = require("../middleware/authMiddleware");
 router.get('/', IndexController.mainPage)
 router.post("/register", IndexController.register);
 router.post("/login", IndexController.login);
-router.get("/users", checkAuth, IndexController.users);
+
+router.get("/allUsers", checkAuth, IndexController.allUsers);
+router.post('/oneUser/:token', checkAuth, IndexController.oneUser)
 
 module.exports = router;
