@@ -82,7 +82,8 @@ class IndexController {
   }
   async oneUser(req, res, next) {
     try {
-      const { token } = req.params;
+      const { authorization } = req.headers;
+			const token = authorization.split(" ")[1];
       const {id} = jwt.decode(token, SECRET_KEY);
       const user = await UsersModel.findById(id);
       res.status(200).json(user.name);
