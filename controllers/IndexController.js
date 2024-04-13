@@ -1,6 +1,5 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const cors = require('cors')
 const { SECRET_KEY } = process.env;
 const { UsersModel } = require("../models/users.model");
 
@@ -87,10 +86,7 @@ class IndexController {
 			const token = authorization.split(" ")[1];
       const {id} = jwt.decode(token, SECRET_KEY);
       const user = await UsersModel.findById(id);
-      res.status(200).json({
-        name: user.name,
-				id: user._id
-      });
+      res.status(200).json(user.name);
     } catch (e) {
       next(e);
     }
