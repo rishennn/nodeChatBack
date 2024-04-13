@@ -86,7 +86,10 @@ class IndexController {
 			const token = authorization.split(" ")[1];
       const {id} = jwt.decode(token, SECRET_KEY);
       const user = await UsersModel.findById(id);
-      res.status(200).json(user.name);
+      res.status(200).json({
+        name: user.name,
+				id: user._id
+      });
     } catch (e) {
       next(e);
     }
