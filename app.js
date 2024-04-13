@@ -1,6 +1,6 @@
 const express = require('express')
 const http = require('http')
-const cors = require('cors')
+// const cors = require('cors')
 const { Server } = require("socket.io");
 const indexRouter = require("./routes/index")
 const connectDB = require("./config");
@@ -8,14 +8,14 @@ const connectDB = require("./config");
 const app = express();
 const server = http.createServer(app);
 
-const io = new Server(server);
+// const io = new Server(server);
 
-// const io = new Server(server, {
-//   cors: {
-//     origin: "http://localhost:5173" || "http://localhost:5174",
-//     methods: ["GET", "POST", "DELETE", "PUT"],
-//   },
-// });
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173" || "http://localhost:5174",
+    methods: ["GET", "POST", "DELETE", "PUT"],
+  },
+});
 
 app.use(express.json())
 app.use(cors())
