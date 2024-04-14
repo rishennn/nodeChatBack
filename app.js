@@ -6,21 +6,22 @@ const indexRouter = require("./routes/index");
 const connectDB = require("./config");
 
 const app = express();
-const server = http.createServer(app);
 
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
+
+const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:5173",
-    methods: ["GET", "POST", "DELETE", "PUT"],
+    methods: ["GET", "POST"],
   },
 });
 
-io.on("connection", (socket) => {
-  console.log("Socket connected : " + socket.id);
-});
+io.on('connection', (socket) => {
+	console.log(`User Connected: ${socket.id}`);
+})
 
 const { DATABASE_URI, PORT } = process.env;
 
@@ -28,7 +29,7 @@ const { DATABASE_URI, PORT } = process.env;
   try {
     await connectDB(DATABASE_URI);
     app.use("/", indexRouter);
-    app.listen(PORT || 3500, () =>
+    server.listen(PORT || 3500, () =>
       console.log(`Server started on port ${PORT || 3500}`)
     );
   } catch (e) {
