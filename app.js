@@ -5,7 +5,7 @@ const { Server } = require("socket.io");
 const indexRouter = require("./routes/index");
 const connectDB = require("./config");
 
-const ChatModels = require("./services/ChatModels")
+const ChatModels = require("./services/ChatModels");
 
 const app = express();
 
@@ -24,7 +24,7 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
 
-	socket.on("create_chat", async (data) => {
+  socket.on("create_chat", async (data) => {
     const database = await ChatModels.createChat({
       name: data.name,
       online: 0,
@@ -32,13 +32,25 @@ io.on("connection", (socket) => {
       author: data.author,
       messages: [],
     });
-		console.log("database", database);
+    console.log("database", database);
     io.emit("receive_chats", database);
   });
 
-	// socket.on("send-message", (data) => {
-	// 	console.log(data);
-	// })
+  socket.on("join_chat", async (data) => {
+    const database = await ChatModels.getChat({
+      roomId: data.roomId,
+    });
+    socket.join(data.roomId);
+    socket.timeout(1000).emit("receive_message", database);
+    if (io.sockets.adapter.rooms.get(data.roomId)) {
+      await ChatModels.changeOnline(
+        { roomId: data.roomId },
+        io.sockets.adapter.rooms.get(data.roomId).size
+      );
+      const dataBas = await ChatModels.getChats();
+      socket.broadcast.emit("receive_chats", dataBas);
+    }
+  });
 
   socket.on("disconnect", () => {
     console.log(`User Disconnected: ${socket.id}`);
