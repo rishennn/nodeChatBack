@@ -47,12 +47,13 @@ io.on("connection", (socket) => {
     socket.join(data.roomId);
     socket.emit("receive_message", database);
     if (io.sockets.adapter.rooms.get(data.roomId)) {
+			console.log(1, io.sockets.adapter.rooms.get(data.roomId));
       await ChatModels.changeOnline(
         data.roomId,
         io.sockets.adapter.rooms.get(data.roomId).size
       );
       const chats = await ChatModels.getChats();
-			console.log(chats);
+			console.log(2,chats);
       socket.emit("receive_chats", chats);
     }
   });
