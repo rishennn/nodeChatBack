@@ -32,6 +32,7 @@ io.on("connection", (socket) => {
       author: data.author,
       data: [],
     });
+		console.log("database", database);
     io.emit("receive_chats", database);
   });
 
