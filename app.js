@@ -36,6 +36,11 @@ io.on("connection", (socket) => {
     io.emit("receive_chats", database);
   });
 
+  socket.on("get_all_chats", async () => {
+    const allChats = await ChatModels.getChats();
+    return allChats;
+  });
+
   socket.on("join_chat", async (data) => {
     const database = await ChatModels.getChat({
       roomId: data.roomId,
