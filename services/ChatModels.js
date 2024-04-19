@@ -25,7 +25,7 @@ class ChatModels {
     try {
       await ChatSchema.insertMany(state);
 			console.log("createChat()", state);
-      const data = await ChatSchema.getChats();
+      const data = await ChatModels.getChats();
       return data;
     } catch (err) {
       console.log(err);
