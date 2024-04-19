@@ -49,6 +49,7 @@ class ChatModels {
         { online: countOnline },
         { new: true }
       );
+			console.log(data);
       return data;
     } catch (err) {
       console.log(err);
