@@ -49,7 +49,7 @@ io.on("connection", (socket) => {
     if (io.sockets.adapter.rooms.get(roomId)) {
 			console.log("data roomId", roomId);
       await ChatModels.changeOnline(
-        roomId,
+        {roomId},
         io.sockets.adapter.rooms.get(roomId).size
       );
       const chats = await ChatModels.getChats();
