@@ -30,7 +30,7 @@ io.on("connection", (socket) => {
       online: 0,
       roomId: Date.now(),
       author: data.author,
-      data: [],
+      messages: [],
     });
 		console.log("database", database);
     io.emit("receive_chats", database);
