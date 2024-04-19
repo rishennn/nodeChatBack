@@ -47,7 +47,7 @@ io.on("connection", (socket) => {
     socket.join(roomId);
     socket.emit("receive_message", database);
     if (io.sockets.adapter.rooms.get(roomId)) {
-			console.log("data roomId", roomId);
+			console.log(">>>>>>", io.sockets.adapter.rooms.get(roomId));
       await ChatModels.changeOnline(
         {roomId},
         io.sockets.adapter.rooms.get(roomId).size
