@@ -38,7 +38,7 @@ io.on("connection", (socket) => {
 
   socket.on("get_all_chats", async () => {
     const allChats = await ChatModels.getChats();
-    return allChats;
+    socket.emit("receive_chats", allChats);
   });
 
   socket.on("join_chat", async (data) => {
