@@ -46,15 +46,14 @@ io.on("connection", (socket) => {
     });
     socket.join(data.roomId);
     socket.emit("receive_message", database);
-		console.log(1, io.sockets.adapter.rooms.get(data.roomId));
     if (io.sockets.adapter.rooms.get(data.roomId)) {
       await ChatModels.changeOnline(
         { roomId: data.roomId },
         io.sockets.adapter.rooms.get(data.roomId).size
       );
-			console.log(2, io.sockets.adapter.rooms.get(data.roomId).size);
-      const dataBas = await ChatModels.getChats();
-      socket.emit("receive_chats", dataBas);
+      const chats = await ChatModels.getChats();
+			console.log(chats);
+      socket.emit("receive_chats", chats);
     }
   });
 
