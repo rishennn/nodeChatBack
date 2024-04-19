@@ -5,6 +5,8 @@ const { Server } = require("socket.io");
 const indexRouter = require("./routes/index");
 const connectDB = require("./config");
 
+const ChatModels = require("./models/chat.model")
+
 const app = express();
 
 app.use(cors());
@@ -21,6 +23,21 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
+
+	socket.on("create_chat", async (data) => {
+    const database = await ChatModels.create({
+      name: data.name,
+      online: 0,
+      idRoom: Date.now(),
+      author: data.author,
+      data: [],
+    });
+    io.emit("receive_chats", database);
+  });
+
+	// socket.on("send-message", (data) => {
+	// 	console.log(data);
+	// })
 
   socket.on("disconnect", () => {
     console.log(`User Disconnected: ${socket.id}`);
