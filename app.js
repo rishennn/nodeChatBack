@@ -19,14 +19,13 @@ const io = new Server(server, {
   },
 });
 
-io.on('connection', (socket) => {
-	console.log(`User Connected: ${socket.id}`);
+io.on("connection", (socket) => {
+  console.log(`User Connected: ${socket.id}`);
 
-	socket.on("disconnect", (socket) => {
-		console.log(`User Disconnected: ${socket.id}`);
-	})
-	
-})
+  socket.on("disconnect", () => {
+    console.log(`User Disconnected: ${socket.id}`);
+  });
+});
 
 const { DATABASE_URI, PORT } = process.env;
 
@@ -40,5 +39,4 @@ const { DATABASE_URI, PORT } = process.env;
   } catch (e) {
     console.log(e);
   }
-})()
-
+})();
