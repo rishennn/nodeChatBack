@@ -4,7 +4,6 @@ class ChatModels {
   static async getChats() {
     try {
       const data = await ChatSchema.find({});
-			console.log("getChats()", data);
       return data;
     } catch (err) {
       console.log(err);
@@ -14,7 +13,6 @@ class ChatModels {
   static async getChat(query) {
     try {
       const data = await ChatSchema.findOne(query);
-			console.log("getChat()", query);
       return data;
     } catch (err) {
       console.log(err);
@@ -24,7 +22,6 @@ class ChatModels {
   static async createChat(state) {
     try {
       await ChatSchema.insertMany(state);
-			console.log("createChat()", state);
       const data = await ChatModels.getChats();
       return data;
     } catch (err) {
