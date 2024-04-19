@@ -5,7 +5,7 @@ const { Server } = require("socket.io");
 const indexRouter = require("./routes/index");
 const connectDB = require("./config");
 
-const ChatModels = require("./models/chat.model")
+const ChatModels = require("./services/ChatModels")
 
 const app = express();
 
@@ -25,7 +25,7 @@ io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
 
 	socket.on("create_chat", async (data) => {
-    const database = await ChatModels.create({
+    const database = await ChatModels.createChat({
       name: data.name,
       online: 0,
       idRoom: Date.now(),
