@@ -28,7 +28,7 @@ io.on("connection", (socket) => {
     const database = await ChatModels.createChat({
       name: data.name,
       online: 0,
-      idRoom: Date.now(),
+      roomId: Date.now(),
       author: data.author,
       data: [],
     });
