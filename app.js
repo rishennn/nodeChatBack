@@ -40,17 +40,17 @@ io.on("connection", (socket) => {
     socket.emit("receive_chats", allChats);
   });
 
-  socket.on("join_chat", async (data) => {
+  socket.on("join_chat", async (roomId) => {
     const database = await ChatModels.getChat({
-      roomId: data.roomId,
+      roomId: roomId,
     });
-    socket.join(data.roomId);
+    socket.join(roomId);
     socket.emit("receive_message", database);
-    if (io.sockets.adapter.rooms.get(data.roomId)) {
-			console.log("data roomId", data.roomId);
+    if (io.sockets.adapter.rooms.get(roomId)) {
+			console.log("data roomId", roomId);
       await ChatModels.changeOnline(
-        data.roomId,
-        io.sockets.adapter.rooms.get(data.roomId).size
+        roomId,
+        io.sockets.adapter.rooms.get(roomId).size
       );
       const chats = await ChatModels.getChats();
       socket.emit("receive_chats", chats);
