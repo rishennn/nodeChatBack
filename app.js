@@ -43,7 +43,7 @@ io.on("connection", (socket) => {
   socket.on("join_chat", async (roomId) => {
     socket.leaveAll();
     socket.join(roomId);
-		changeOnline();
+    changeOnline();
     const database = await ChatModels.getChat({
       roomId: roomId,
     });
@@ -54,6 +54,7 @@ io.on("connection", (socket) => {
       //   {roomId},
       //   io.sockets.adapter.rooms.get(roomId).size
       // );
+      changeOnline();
       const chats = await ChatModels.getChats();
       socket.emit("receive_chats", chats);
     }
