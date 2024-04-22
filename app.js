@@ -41,26 +41,26 @@ io.on("connection", (socket) => {
   });
 
   socket.on("join_chat", async (roomId) => {
-		socket.leaveAll();
+    socket.leaveAll();
+    socket.join(roomId);
+		changeOnline();
     const database = await ChatModels.getChat({
       roomId: roomId,
     });
-    socket.join(roomId);
     socket.emit("receive_message", database);
     if (io.sockets.adapter.rooms.get(roomId)) {
-			console.log(">>>>>>", io.sockets.adapter.rooms.get(roomId));
+      console.log(">>>>>>", io.sockets.adapter.rooms.get(roomId));
       // await ChatModels.changeOnline(
       //   {roomId},
       //   io.sockets.adapter.rooms.get(roomId).size
       // );
       const chats = await ChatModels.getChats();
       socket.emit("receive_chats", chats);
-			changeOnline()
     }
   });
 
   socket.on("disconnect", () => {
-		changeOnline()
+    changeOnline();
     console.log(`User Disconnected: ${socket.id}`);
   });
 });
@@ -82,9 +82,11 @@ const { DATABASE_URI, PORT } = process.env;
 async function changeOnline() {
   const chats = await ChatModels.getChats();
   for (let i = 0; i < chats.length; i++) {
-    console.log(1, io.sockets.adapter.rooms.get(chats[i].roomId));
     if (io.sockets.adapter.rooms.get(chats[i].roomId)) {
-      await ChatModels.changeOnline({ roomId: chats[i].roomId }, io.sockets.adapter.rooms.get(chats[i].roomId).size);
+      await ChatModels.changeOnline(
+        { roomId: chats[i].roomId },
+        io.sockets.adapter.rooms.get(chats[i].roomId).size
+      );
     } else {
       await ChatModels.changeOnline({ roomId: chats[i].roomId }, 0);
     }
