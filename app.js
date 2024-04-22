@@ -73,6 +73,7 @@ io.on("connection", (socket) => {
       }
     );
     io.to(data.roomId).emit("receive_message", database);
+		console.log(database);
     io.emit("receive_chats", await ChatModels.getChats());
   });
 
