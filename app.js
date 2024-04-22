@@ -53,9 +53,9 @@ io.on("connection", (socket) => {
       //   {roomId},
       //   io.sockets.adapter.rooms.get(roomId).size
       // );
-			changeOnline()
       const chats = await ChatModels.getChats();
       socket.emit("receive_chats", chats);
+			changeOnline()
     }
   });
 
