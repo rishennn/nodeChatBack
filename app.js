@@ -41,6 +41,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("join_chat", async (roomId) => {
+		socket.leaveAll();
     const database = await ChatModels.getChat({
       roomId: roomId,
     });
@@ -58,6 +59,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
+		changeOnline()
     console.log(`User Disconnected: ${socket.id}`);
   });
 });
@@ -75,3 +77,15 @@ const { DATABASE_URI, PORT } = process.env;
     console.log(e);
   }
 })();
+
+async function changeOnline() {
+  const chats = await ChatModels.getChats();
+  for (let i = 0; i < chats.length; i++) {
+    console.log(1, io.sockets.adapter.rooms.get(chats[i].roomId));
+    if (io.sockets.adapter.rooms.get(chats[i].roomId)) {
+      await ChatModels.changeOnline({ roomId: chats[i].roomId }, io.sockets.adapter.rooms.get(chats[i].roomId).size);
+    } else {
+      await ChatModels.changeOnline({ roomId: chats[i].roomId }, 0);
+    }
+  }
+}
