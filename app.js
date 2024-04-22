@@ -49,10 +49,11 @@ io.on("connection", (socket) => {
     socket.emit("receive_message", database);
     if (io.sockets.adapter.rooms.get(roomId)) {
 			console.log(">>>>>>", io.sockets.adapter.rooms.get(roomId));
-      await ChatModels.changeOnline(
-        {roomId},
-        io.sockets.adapter.rooms.get(roomId).size
-      );
+      // await ChatModels.changeOnline(
+      //   {roomId},
+      //   io.sockets.adapter.rooms.get(roomId).size
+      // );
+			changeOnline()
       const chats = await ChatModels.getChats();
       socket.emit("receive_chats", chats);
     }
