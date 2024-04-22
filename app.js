@@ -60,6 +60,22 @@ io.on("connection", (socket) => {
     }
   });
 
+	socket.on("send_message", async (data) => {
+    const database = await ChatModels.addMessage(
+      { roomId: data.roomId },
+      {
+        author: {
+          name: socket.handshake.auth.name,
+          id: socket.handshake.auth.id,
+        },
+        message: data.message,
+        date: data.date,
+      }
+    );
+    io.to(data.roomId).emit("receive_message", database);
+    io.emit("receive_chats", await ChatModels.getChats());
+  });
+
   socket.on("disconnect", () => {
     changeOnline();
     console.log(`User Disconnected: ${socket.id}`);
