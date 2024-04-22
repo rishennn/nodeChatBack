@@ -61,6 +61,7 @@ io.on("connection", (socket) => {
   });
 
 	socket.on("send_message", async (data) => {
+		console.log(">>>>>>>", data)
     const database = await ChatModels.addMessage(
       { roomId: data.roomId },
       {
@@ -73,7 +74,6 @@ io.on("connection", (socket) => {
       }
     );
     io.to(data.roomId).emit("receive_message", database);
-		console.log(database);
     io.emit("receive_chats", await ChatModels.getChats());
   });
 
